@@ -16,7 +16,7 @@ const port = 5500;
 app.use(express.json());
 app.use(cookieParser());
 app.use(sessionHandler());
-app.use(cors()); 
+app.use(cors());
 app.use(
     morgan(":method :url :status :res[content-length] - :response-time ms")
   );

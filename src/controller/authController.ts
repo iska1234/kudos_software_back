@@ -32,18 +32,22 @@ export const login = async (
 ) => {
   try {
     const { email, password } = req.body;
-    const { id, token, role } = await loginUserToken(email, password);
+
+
+    const { id, token } = await loginUserToken(email, password);
+
     req.session.userId = id;
     return res.json({
       success: true,
       message: "Inicio de sesión exitoso",
-      data: { token, userId: id, role },
+      data: { token },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error en el inicio de sesión:", error);
     return next(new ApiError("Credenciales incorrectas", 401));
   }
 };
+
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {
   req.session.destroy((error) => {

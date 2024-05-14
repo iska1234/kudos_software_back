@@ -30,7 +30,7 @@ export const loginUserToken = async (
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!passwordMatch) throw new ApiError("Las contraseñas no coinciden", 400);
 
-  const token = generateToken({ role: user.role || '' });
+  const token = generateToken({ userId, role: user.role || '' });
 
   return { id: userId, token, role: user.role };
 };

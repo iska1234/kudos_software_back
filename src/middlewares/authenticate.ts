@@ -34,8 +34,6 @@ export function authenticateHandler(
       exp: number;
     };
 
-    console.log("Payload verificado:", payload);
-
     req.userId = payload.userId;
     req.userRole = payload.userRole;
     next();
