@@ -9,12 +9,19 @@ export async function registerUser(
   age: number,
   role: string
 ): Promise<Users> {
-  return (
+
+  const insertedUser = (
     await query(
       "INSERT INTO users (name, email, password, age, role) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [name, email, password, age, role]
     )
   ).rows[0];
+
+  const userWithoutPassword = await query("SELECT id, name, email, age, role FROM users WHERE id = $1", [
+    insertedUser.id,
+  ]);
+
+  return userWithoutPassword.rows[0];
 }
 
 export async function loginUser(
