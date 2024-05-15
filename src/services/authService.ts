@@ -30,13 +30,13 @@ export const loginUserToken = async (
   const user = await loginUser(email, password);
   if (!user)
     throw new ApiError("Error en el login", 400, {
-      email: "Contraseña incorrecta",
+      password: "Contraseña incorrecta",
     });
 
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!passwordMatch)
     throw new ApiError("Error en el login", 400, {
-      email: "Contraseña incorrecta",
+      password: "Contraseña incorrecta",
     });
 
   const token = generateToken({ userId, role: user.role || "" });

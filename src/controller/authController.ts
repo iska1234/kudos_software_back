@@ -3,6 +3,7 @@ import { ApiError } from "../middlewares/error";
 import { userSchema } from "../models/users";
 import { loginUserToken, registerUserToken } from "../services/authService";
 import z from "zod";
+import { verifyEmail } from "../data/auth-data";
 
 export const register = async (
   req: Request,
@@ -11,7 +12,15 @@ export const register = async (
 ) => {
   try {
     const { name, email, password, age, role } = userSchema.parse(req.body);
-
+    const existingUser = await verifyEmail(email);
+    if (existingUser) {
+      return res.status(400).json({
+        ok: false,
+        error: {
+          message: "El correo electrónico ya está registrado",
+        }
+      });
+    }
     const user = await registerUserToken(name, email, password, age || 0, role);
 
     return res.status(201).json({
@@ -19,10 +28,17 @@ export const register = async (
       message: "Usuario registrado exitosamente",
       data: user,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error en el registro:", error);
 
-    if (error instanceof ApiError) {
+    if (error.code === "23505" && error.constraint === "users_email_key") {
+      return res.status(400).json({
+        ok: false,
+        error: {
+          message: "El correo electrónico ya está registrado",
+        }
+      });
+    } else if (error instanceof ApiError) {
       return res.status(error.status).json({
         ok: false,
         error: { message: error.message, details: error.details || {} }
