@@ -5,6 +5,7 @@ import cors from "cors";
 import errorHandler from "./middlewares/error";
 import authRouter from "./routers/authRouter";
 import sessionHandler from "./middlewares/session";
+import savedDataRouter from "./routers/savedDataRouter";
 
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(
   );
   
 app.use("/auth", authRouter);
+app.use("/saveddata", savedDataRouter);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Escuchando al puerto ${port}`));

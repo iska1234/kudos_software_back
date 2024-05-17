@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { ApiError } from "./error";
+import "dotenv/config";
 
 declare global {
   namespace Express {
@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const jwtSecret =  process.env["JWT_SECRET"] || '';
+const jwtSecret = process.env['JWT_SECRET'] || '';
 
 export function authenticateHandler(
   req: Request,
@@ -22,23 +22,21 @@ export function authenticateHandler(
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    console.log("No se encontró token de autorización");
-    return next(new ApiError("No autorizado", 401));
+    return next(new ApiError("No se encontró token de autorización", 401));
   }
 
   try {
     const payload = jwt.verify(token, jwtSecret) as {
       userId: number;
-      userRole: string;
+      role: string;
       iat: number;
       exp: number;
     };
 
     req.userId = payload.userId;
-    req.userRole = payload.userRole;
+    req.userRole = payload.role;
     next();
   } catch (error) {
-    console.error("Error al verificar el token:", error);
-    return next(new ApiError("No autorizado", 401));
+    return next(new ApiError(`Error al verificar el token: ${error}`, 401));
   }
 }
