@@ -30,3 +30,14 @@ CREATE TABLE saved_data (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Crear la tabla sharedData para la relación de muchos a muchos entre usuarios y datos compartidos
+CREATE TABLE shared_data (
+    id SERIAL PRIMARY KEY,
+    userId INT NOT NULL,
+    savedDataId INT NOT NULL,
+    sharedWithUserId INT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (savedDataId) REFERENCES savedData(id) ON DELETE CASCADE,
+    FOREIGN KEY (sharedWithUserId) REFERENCES users(id) ON DELETE CASCADE
+);
