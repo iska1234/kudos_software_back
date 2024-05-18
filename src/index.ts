@@ -7,7 +7,7 @@ import authRouter from "./routers/authRouter";
 import sessionHandler from "./middlewares/session";
 import savedDataRouter from "./routers/savedDataRouter";
 import userRouter from "./routers/userRouter";
-
+import sharedDataRouter from "./routers/sharedDataRouter";
 
 dotenv.config();
 
@@ -26,6 +26,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/saveddata", savedDataRouter);
 app.use("/user", userRouter);
+app.use("/shareddata", sharedDataRouter);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Escuchando al puerto ${port}`));
