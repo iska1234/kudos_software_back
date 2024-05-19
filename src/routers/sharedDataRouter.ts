@@ -44,6 +44,14 @@ sharedDataRouter.put(
   deleteSharedDataByIdController
 );
 
+sharedDataRouter.put(
+  "/restore/:sharedDataId",
+  authenticateHandler,
+  authorize("admin"),
+  deleteSharedDataByIdController
+);
+
+
 sharedDataRouter.get(
   "/shared/deleted",
   authenticateHandler,

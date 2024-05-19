@@ -77,6 +77,19 @@ export async function deleteSharedDataById(sharedDataId: number): Promise<Shared
   return result.rows[0];
 }
 
+export async function restoreSharedDataById(sharedDataId: number): Promise<SharedData | null> {
+  const result = await query(
+    `UPDATE shared_data SET deleted = false WHERE id = $1 RETURNING *`,
+    [sharedDataId]
+  );
+  
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+}
+
 export async function getSharedDataWithDeleted(): Promise<SharedData[]> {
   const result = await query(
     `SELECT sd.id, sd.adminId, sd.savedDataId, sd.sharedWithUserId, sd.created_at, sd.updated_at,

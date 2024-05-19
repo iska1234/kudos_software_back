@@ -8,6 +8,7 @@ import {
   getSharedDataDetailWithDeletedService,
   getSharedDataWithDeletedService,
   insertSharedDataService,
+  restoreSharedDataByIdService,
 } from "../services/sharedDataService";
 
 export async function insertSharedDataController(
@@ -133,6 +134,35 @@ export async function getSharedDataBySavedDataIdController(
   }
 }
 
+export async function restoreSharedDataByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const sharedDataId = req.params["sharedDataId"];
+
+    if (!sharedDataId) {
+      throw new Error(
+        "ID de SharedData no encontrado en los parámetros de solicitud"
+      );
+    }
+
+    const updatedSharedData = await restoreSharedDataByIdService(
+      Number(sharedDataId)
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Shared data deleted successfully",
+      data: updatedSharedData,
+    });
+  } catch (error) {
+    console.error("Error al eliminar los datos compartidos:", error);
+    return next(new ApiError("Error al eliminar los datos compartidos", 500));
+  }
+}
+
 export async function deleteSharedDataByIdController(
   req: Request,
   res: Response,
@@ -161,6 +191,7 @@ export async function deleteSharedDataByIdController(
     return next(new ApiError("Error al eliminar los datos compartidos", 500));
   }
 }
+
 
 export async function getSharedDataWithDeletedController(
   _req: Request,
