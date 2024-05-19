@@ -50,8 +50,8 @@ export async function deleteSharedDataByIdService(sharedDataId: number): Promise
 }
 
 export async function restoreSharedDataByIdService(sharedDataId: number): Promise<SharedData | null> {
-  const deletedData = await restoreSharedDataById(sharedDataId);
-  return deletedData;
+  const restoredData = await restoreSharedDataById(sharedDataId);
+  return restoredData;
 }
 
 

@@ -7,6 +7,7 @@ import {
   getSharedDataDetailWithDeletedController,
   getSharedDataWithDeletedController,
   insertSharedDataController,
+  restoreSharedDataByIdController,
 } from "../controller/sharedDataController";
 import { authorize } from "../middlewares/authorize";
 import { authenticateHandler } from "../middlewares/authenticate";
@@ -48,7 +49,7 @@ sharedDataRouter.put(
   "/restore/:sharedDataId",
   authenticateHandler,
   authorize("admin"),
-  deleteSharedDataByIdController
+  restoreSharedDataByIdController
 );
 
 
