@@ -5,6 +5,8 @@ import {
   getSharedDataByAdminIdService,
   getSharedDataByIdService,
   getSharedDataByUserIdService,
+  getSharedDataDetailWithDeletedService,
+  getSharedDataWithDeletedService,
   insertSharedDataService,
 } from "../services/sharedDataService";
 
@@ -51,7 +53,9 @@ export async function getSharedDataByAdminIdController(
     const adminId = req.params["adminId"];
 
     if (!adminId) {
-      throw new Error("Admin ID not found in request parameters");
+      throw new Error(
+        "ID de Admin no encontrado en los parámetros de solicitud"
+      );
     }
 
     const sharedData = await getSharedDataByAdminIdService(Number(adminId));
@@ -77,7 +81,9 @@ export async function getSharedDataByUserIdController(
     const userId = req.params["userId"];
 
     if (!userId) {
-      throw new Error("El userId no existe en los parametros");
+      throw new Error(
+        "ID de Usuario no encontrado en los parámetros de solicitud"
+      );
     }
 
     const sharedData = await getSharedDataByUserIdService(Number(userId));
@@ -94,51 +100,125 @@ export async function getSharedDataByUserIdController(
   }
 }
 
-
 export async function getSharedDataBySavedDataIdController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const sharedDataId = req.params['sharedDataId'];
+    const sharedDataId = req.params["sharedDataId"];
 
     if (!sharedDataId) {
-      throw new Error("Shared data ID not found in request parameters");
+      throw new Error(
+        "ID de SharedData no encontrado en los parámetros de solicitud"
+      );
     }
 
     const sharedData = await getSharedDataByIdService(Number(sharedDataId));
     return res.status(200).json({
       success: true,
-      data: sharedData
+      data: sharedData,
     });
   } catch (error) {
-    console.error("Error al obtener los datos compartidos por sharedDataId:", error);
-    return next(new ApiError("Error al obtener los datos compartidos por sharedDataId", 500));
+    console.error(
+      "Error al obtener los datos compartidos por sharedDataId:",
+      error
+    );
+    return next(
+      new ApiError(
+        "Error al obtener los datos compartidos por sharedDataId",
+        500
+      )
+    );
   }
 }
 
-  export async function deleteSharedDataByIdController(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const sharedDataId = req.params["sharedDataId"];
-  
-      if (!sharedDataId) {
-        throw new Error("Shared data ID not found in request parameters");
-      }
-  
-      const updatedSharedData = await deleteSharedDataByIdService(Number(sharedDataId));
-  
-      return res.status(200).json({
-        success: true,
-        message: "Shared data deleted successfully",
-        data: updatedSharedData
-      });
-    } catch (error) {
-      console.error("Error al eliminar los datos compartidos:", error);
-      return next(new ApiError("Error al eliminar los datos compartidos", 500));
+export async function deleteSharedDataByIdController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const sharedDataId = req.params["sharedDataId"];
+
+    if (!sharedDataId) {
+      throw new Error(
+        "ID de SharedData no encontrado en los parámetros de solicitud"
+      );
     }
+
+    const updatedSharedData = await deleteSharedDataByIdService(
+      Number(sharedDataId)
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Shared data deleted successfully",
+      data: updatedSharedData,
+    });
+  } catch (error) {
+    console.error("Error al eliminar los datos compartidos:", error);
+    return next(new ApiError("Error al eliminar los datos compartidos", 500));
   }
+}
+
+export async function getSharedDataWithDeletedController(
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const sharedData = await getSharedDataWithDeletedService();
+
+    return res.status(200).json({
+      success: true,
+      data: sharedData,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener los datos compartidos con deleted en true:",
+      error
+    );
+    return next(
+      new ApiError(
+        "Error al obtener los datos compartidos con deleted en true",
+        500
+      )
+    );
+  }
+}
+
+export async function getSharedDataDetailWithDeletedController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const sharedDataId = req.params["sharedDataId"];
+
+    if (!sharedDataId) {
+      throw new Error(
+        "ID de SharedData no encontrado en los parámetros de solicitud"
+      );
+    }
+
+    const sharedDataDetail = await getSharedDataDetailWithDeletedService(
+      Number(sharedDataId)
+    );
+    return res.status(200).json({
+      success: true,
+      data: sharedDataDetail,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener el detalle de los datos compartidos con deleted en true:",
+      error
+    );
+    return next(
+      new ApiError(
+        "Error al obtener el detalle de los datos compartidos con deleted en true",
+        500
+      )
+    );
+  }
+}

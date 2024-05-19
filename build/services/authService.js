@@ -17,14 +17,20 @@ exports.registerUserToken = registerUserToken;
 const loginUserToken = async (email, password) => {
     const userId = await (0, auth_data_1.getUserIdByEmail)(email);
     if (!userId)
-        throw new error_1.ApiError("Usuario no encontrado", 404);
+        throw new error_1.ApiError("Error en el login", 400, {
+            email: "El usuario no existe",
+        });
     const user = await (0, auth_data_1.loginUser)(email, password);
     if (!user)
-        throw new error_1.ApiError("Credenciales incorrectas", 400);
+        throw new error_1.ApiError("Error en el login", 400, {
+            password: "Contraseña incorrecta",
+        });
     const passwordMatch = await bcryptjs_1.default.compare(password, user.password);
     if (!passwordMatch)
-        throw new error_1.ApiError("Las contraseñas no coinciden", 400);
-    const token = (0, token_1.generateToken)({ role: user.role || '' });
+        throw new error_1.ApiError("Error en el login", 400, {
+            password: "Contraseña incorrecta",
+        });
+    const token = (0, token_1.generateToken)({ userId, role: user.role || "" });
     return { id: userId, token, role: user.role };
 };
 exports.loginUserToken = loginUserToken;

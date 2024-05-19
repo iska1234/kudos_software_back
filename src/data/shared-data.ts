@@ -64,13 +64,49 @@ export async function getSharedDataById(
   return result.rows;
 }
 
-
 export async function deleteSharedDataById(sharedDataId: number): Promise<SharedData | null> {
   const result = await query(
     `UPDATE shared_data SET deleted = true WHERE id = $1 RETURNING *`,
     [sharedDataId]
   );
   
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+}
+
+export async function getSharedDataWithDeleted(): Promise<SharedData[]> {
+  const result = await query(
+    `SELECT sd.id, sd.adminId, sd.savedDataId, sd.sharedWithUserId, sd.created_at, sd.updated_at,
+            u1.Name AS admin_name, sdata.description, sdata.data_content,
+            u2.Name AS shared_with_user_name
+     FROM shared_data sd
+     INNER JOIN users u1 ON sd.adminId = u1.id
+     INNER JOIN saved_data sdata ON sd.savedDataId = sdata.id
+     INNER JOIN users u2 ON sd.sharedWithUserId = u2.id
+     WHERE sd.deleted = true`,
+    []
+  );
+  return result.rows;
+}
+
+export async function getSharedDataDetailWithDeleted(
+  sharedDataId: number
+): Promise<SharedData | null> {
+  const result = await query(
+    `SELECT sd.id, sd.adminId, sd.savedDataId, sd.sharedWithUserId, sd.created_at, sd.updated_at,
+            u1.Name AS admin_name, sdata.description, sdata.data_content,
+            u2.Name AS shared_with_user_name
+     FROM shared_data sd
+     INNER JOIN users u1 ON sd.adminId = u1.id
+     INNER JOIN saved_data sdata ON sd.savedDataId = sdata.id
+     INNER JOIN users u2 ON sd.sharedWithUserId = u2.id
+     WHERE sd.id = $1 AND sd.deleted = true`,
+    [sharedDataId]
+  );
+
   if (result.rows.length === 0) {
     return null;
   }

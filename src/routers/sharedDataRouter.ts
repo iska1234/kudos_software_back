@@ -4,6 +4,8 @@ import {
   getSharedDataByAdminIdController,
   getSharedDataBySavedDataIdController,
   getSharedDataByUserIdController,
+  getSharedDataDetailWithDeletedController,
+  getSharedDataWithDeletedController,
   insertSharedDataController,
 } from "../controller/sharedDataController";
 import { authorize } from "../middlewares/authorize";
@@ -40,6 +42,19 @@ sharedDataRouter.put(
   authenticateHandler,
   authorize("admin"),
   deleteSharedDataByIdController
+);
+
+sharedDataRouter.get(
+  "/shared/deleted",
+  authenticateHandler,
+  authorize("admin"),
+  getSharedDataWithDeletedController
+);
+sharedDataRouter.get(
+  "/shared/deleted/:sharedDataId",
+  authenticateHandler,
+  authorize("admin"),
+  getSharedDataDetailWithDeletedController
 );
 
 export default sharedDataRouter;

@@ -8,7 +8,7 @@ require("dotenv/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const generateToken = (user) => {
     const jwtSecret = process.env["JWT_SECRET"] || '';
-    return jsonwebtoken_1.default.sign({ role: user.role }, jwtSecret, {
+    return jsonwebtoken_1.default.sign({ userId: user.userId, role: user.role }, jwtSecret, {
         expiresIn: "1d",
     });
 };

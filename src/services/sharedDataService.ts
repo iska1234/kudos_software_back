@@ -3,6 +3,8 @@ import {
   getSharedDataByAdminId,
   getSharedDataById,
   getSharedDataByUserId,
+  getSharedDataDetailWithDeleted,
+  getSharedDataWithDeleted,
   insertSharedData,
 } from "../data/shared-data";
 import { SharedData } from "../models/sharedData";
@@ -44,4 +46,17 @@ export async function getSharedDataByIdService(
 export async function deleteSharedDataByIdService(sharedDataId: number): Promise<SharedData | null> {
   const deletedData = await deleteSharedDataById(sharedDataId);
   return deletedData;
+}
+
+
+export async function getSharedDataWithDeletedService(): Promise<SharedData[]> {
+  const sharedData = await getSharedDataWithDeleted();
+  return sharedData;
+}
+
+export async function getSharedDataDetailWithDeletedService(
+  sharedDataId: number
+): Promise<SharedData | null> {
+  const sharedDataDetail = await getSharedDataDetailWithDeleted(sharedDataId);
+  return sharedDataDetail;
 }
