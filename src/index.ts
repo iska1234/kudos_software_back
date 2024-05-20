@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
+import { configDotenv } from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import errorHandler from "./middlewares/error";
@@ -9,7 +9,11 @@ import savedDataRouter from "./routers/savedDataRouter";
 import userRouter from "./routers/userRouter";
 import sharedDataRouter from "./routers/sharedDataRouter";
 
-dotenv.config();
+if (process.env["NODE_ENV"] === "test") {
+  configDotenv({ path: ".env.test" });
+} else {
+  configDotenv();
+}
 
 const morgan = require("morgan");
 const app = express();
@@ -30,3 +34,5 @@ app.use("/shareddata", sharedDataRouter);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Escuchando al puerto ${port}`));
+
+export default app;
