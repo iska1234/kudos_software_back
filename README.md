@@ -4,6 +4,8 @@
     <br> 
 </p>
 
+Url Api: https://kudos-software-back.onrender.com
+
 ## 📝 Table of Contents
 
 - [About](#about)
@@ -12,6 +14,7 @@
 - [Structure](#structure)
 - [Features](#features)
 - [Built Using](#built_using)
+- [Deploy Using](#deploy_using)
 
 ## 🧐 About <a name = "about"></a>
 - This backend API follows a three-layer architecture, enabling authenticated users, particularly those with admin roles, to upload CSV files for creating records in a PostgreSQL database securely.
@@ -201,3 +204,5 @@ GET /shared/deleted/:sharedDataId: Get shared data detail with deleted status by
 - [Zod](https://zod.dev/)
 - [Vitest](https://vitest.dev/)
 
+## 🚀 Deploy Using <a name = "built_using"></a>
+- [Render](https://render.com)
